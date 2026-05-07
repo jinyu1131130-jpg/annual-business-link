@@ -696,7 +696,7 @@
 
             <div class="button-grid">
               <button class="btn line" onclick='copyLineId("${escapeAttr(item.lineId || "")}")'>複製 LINE ID</button>
-              <button class="btn line" onclick='openLineSearch("${escapeAttr(item.lineId || "")}")'>開啟 LINE</button>
+              <button class="btn line" onclick='openLineLink("${escapeAttr(item.lineLink || "")}", "${escapeAttr(item.lineId || "")}")'>加 LINE 好友</button>
               <button class="btn secondary" onclick='quickSaveFromEncoded("${itemJson}", "加入我的目標")'>加入我的目標</button>
               <button class="btn green" onclick='quickSaveFromEncoded("${itemJson}", "已認識")'>已認識</button>
               <button class="btn orange" onclick='quickSaveFromEncoded("${itemJson}", "想約1-1")'>想約 1-1</button>
@@ -1008,7 +1008,28 @@
       document.getElementById("missionText").textContent =
         "目前完成 " + meetCount + " / 5 位新連結";
     }
+    
+function openLineLink(lineLink, lineId) {
+  lineLink = String(lineLink || "").trim();
+  lineId = String(lineId || "").trim();
 
+  if (lineLink) {
+    window.open(lineLink, "_blank");
+    return;
+  }
+
+  if (lineId) {
+    copyLineId(lineId);
+    setTimeout(function() {
+      window.open("https://line.me/R/nv/addFriends", "_blank");
+    }, 300);
+    alert("這位夥伴沒有填加好友連結，已先複製 LINE ID。\n請到 LINE 搜尋貼上：" + lineId);
+    return;
+  }
+
+  alert("這位夥伴沒有填寫 LINE 加好友連結或 LINE ID");
+}
+    
     function copyLineId(lineId) {
       lineId = String(lineId || "").trim();
 
