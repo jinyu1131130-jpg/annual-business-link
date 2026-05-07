@@ -603,9 +603,24 @@ function addKeyword(k) {
       const result = document.getElementById("result");
 
       if (!keyword) {
-        alert("請輸入關鍵字");
-        return;
-      }
+  alert("請先輸入或點選至少一個關鍵字");
+  return;
+}
+
+const keywords = keyword
+  .split(/[\s,，、]+/)
+  .map(x => x.trim())
+  .filter(Boolean);
+
+if (keywords.length === 0) {
+  alert("請輸入有效的關鍵字");
+  return;
+}
+
+if (keywords.length > 5) {
+  const ok = confirm("你目前輸入超過 5 個關鍵字，搜尋結果可能會比較雜。仍要繼續搜尋嗎？");
+  if (!ok) return;
+}
 
       status.style.display = "block";
       status.innerHTML = "搜尋中...";
