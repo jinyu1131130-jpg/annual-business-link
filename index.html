@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>年會商務連結小幫手</title>
+
+  <style>
+    body {
+      font-family: Arial, "Noto Sans TC", sans-serif;
+      background: #f5f6f8;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+
+    .header {
+      background: #1f4e79;
+      color: white;
+      padding: 20px 16px;
+      border-radius: 0 0 20px 20px;
+      margin-bottom: 16px;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .header .container {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin: 0 0 8px;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin: 0 0 12px;
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      margin: 10px 0 6px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 16px;
+      background: white;
+    }
+
+    textarea {
+      min-height: 72px;
+      resize: vertical;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 10px;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 10px;
+      background: #1f4e79;
+      color: white;
+    }
+
+    .btn.secondary {
+      background: #e9eef4;
+      color: #1f4e79;
+    }
+
+    .btn.green {
+      background: #2e7d32;
+      color: white;
+    }
+
+    .btn.orange {
+      background: #ef6c00;
+      color: white;
+    }
+
+    .btn.gray {
+      background: #666;
+      color: white;
+    }
+
+    .quick-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .chip {
+      border: 1px solid #c8d7e8;
+      background: #eef5ff;
+      color: #1f4e79;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .tab {
+      border: none;
+      background: #e9eef4;
+      color: #1f4e79;
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      background: #1f4e79;
+      color: white;
+    }
+
+    .person-name {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .meta {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .need {
+      background: #f8fafc;
+      border-left: 4px solid #1f4e79;
+      padding: 10px;
+      white-space: pre-line;
+      line-height: 1.5;
+      margin: 10px 0;
+      border-radius: 8px;
+    }
+
+    .match {
+      font-size: 13px;
+      color: #ef6c00;
+      margin-top: 8px;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .small-note {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .status {
+      padding: 10px;
+      background: #fff8e1;
+      border-radius: 10px;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .empty {
+      text-align: center;
+      color: #777;
+      padding: 24px 8px;
+    }
+
+    .modal-bg {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.45);
+      overflow: auto;
+    }
+
+    .modal {
+      background: white;
+      margin: 40px auto;
+      padding: 18px;
+      border-radius: 18px;
+      width: calc(100% - 32px);
+      max-width: 520px;
+      box-sizing: border-box;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .close {
+      float: right;
+      font-size: 24px;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .stat-box {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-size: 26px;
+      font-weight: bold;
+      color: #1f4e79;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #555;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 560px) {
+      .row,
+      .button-grid,
+      .tabs {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <div class="container">
+      <h1>年會商務連結小幫手</h1>
+      <p>搜尋目標名單，現場快速記錄，年會後追蹤 1-1、引薦與合作。</p>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('searchTab', this)">找人脈</button>
+      <button class="tab" onclick="showTab('targetTab', this)">我的目標</button>
+      <button class="tab" onclick="showTab('resultTab', this)">我的成果</button>
+    </div>
+
+    <div class="card">
+      <h2>先填寫你的資料</h2>
+
+      <div class="row">
+        <div>
+          <label>你的姓名</label>
+          <input id="recorderName" placeholder="例如：許瓊玉" oninput="saveProfile()" />
+        </div>
+
+        <div>
+          <label>你的分會</label>
+          <input id="recorderBranch" placeholder="例如：金鈺" oninput="saveProfile()" />
+        </div>
+      </div>
+
+      <p class="small-note">
+        這份資料會暫存在你的手機/瀏覽器。換手機或清除瀏覽器資料後，需要重新填寫。
+      </p>
+    </div>
+
+    <!-- 找人脈 -->
+    <div id="searchTab">
+      <div class="card">
+        <h2>搜尋你想認識的人脈</h2>
+
+        <label>關鍵字搜尋</label>
+        <input id="keyword" placeholder="例如：企業主、保險、室內設計、公司福委會" />
+
+        <button class="btn" onclick="searchMembers()">搜尋</button>
+
+        <div class="quick-buttons" id="quickButtons"></div>
+
+        <div id="searchStatus" class="status"></div>
+      </div>
+
+      <div id="result"></div>
+    </div>
+
+    <!-- 我的目標 -->
+    <div id="targetTab" style="display:none;">
+      <div class="card">
+        <h2>我的目標名單</h2>
+        <p class="small-note">這裡顯示你按過「加入我的目標」的人。資料暫存在目前這台手機/瀏覽器。</p>
+      </div>
+      <div id="targetList"></div>
+    </div>
+
+    <!-- 我的成果 -->
+    <div id="resultTab" style="display:none;">
+      <div class="card">
+        <h2>我的年會連結成果</h2>
+        <div class="stats">
+          <div class="stat-box">
+            <div class="stat-num" id="statTarget">0</div>
+            <div class="stat-label">目標名單</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="statMeet">0</div>
+            <div class="stat-label">已認識</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="statOne">0</div>
+            <div class="stat-label">想約 1-1</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="statBiz">0</div>
+            <div class="stat-label">引薦/合作可能</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>今日任務</h2>
+        <p id="missionText">目前完成 0 / 5 位新連結</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 紀錄互動 Modal -->
+  <div id="recordModalBg" class="modal-bg">
+    <div class="modal">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div class="modal-title">記錄互動</div>
+      <div id="modalTargetInfo" class="small-note"></div>
+
+      <label>動作</label>
+      <select id="modalAction">
+        <option value="加入我的目標">加入我的目標</option>
+        <option value="已認識">已認識</option>
+        <option value="已加LINE">已加 LINE</option>
+        <option value="想約1-1">想約 1-1</option>
+        <option value="有引薦可能">有引薦可能</option>
+        <option value="有合作可能">有合作可能</option>
+      </select>
+
+      <label>是否已加 LINE</label>
+      <select id="modalHasLine">
+        <option value="">未填</option>
+        <option value="是">是</option>
+        <option value="否">否</option>
+      </select>
+
+      <label>後續價值</label>
+      <select id="modalValueLevel">
+        <option value="">未判斷</option>
+        <option value="A級｜很適合1-1">A級｜很適合 1-1</option>
+        <option value="B級｜可保持聯繫">B級｜可保持聯繫</option>
+        <option value="C級｜認識即可">C級｜認識即可</option>
+      </select>
+
+      <label>下次動作</label>
+      <select id="modalNextAction">
+        <option value="">未填</option>
+        <option value="我要約他1-1">我要約他 1-1</option>
+        <option value="我要介紹人給他">我要介紹人給他</option>
+        <option value="請商務組協助媒合">請商務組協助媒合</option>
+        <option value="暫不追蹤">暫不追蹤</option>
+      </select>
+
+      <label>備註</label>
+      <textarea id="modalNote" placeholder="可不填，例如：對方想認識企業主，我可介紹某某。"></textarea>
+
+      <button class="btn green" onclick="submitRecord()">儲存紀錄</button>
+      <button class="btn secondary" onclick="closeModal()">取消</button>
+
+      <div id="modalStatus" class="status"></div>
+    </div>
+  </div>
+
+  <script>
+    /********************************************
+     * 這裡換成你的 GAS Web App 網址
+     ********************************************/
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbzqmneMaQy6JivkLC5DvTcQ51JIPon3zmac_Mf9kds3z6j4FqNxLqewOv8O7-t20JrT/exec";
+
+    let currentTarget = null;
+
+    window.onload = function() {
+      loadProfile();
+      loadQuickButtons();
+      renderTargets();
+      updateStats();
+    };
+
+    function apiCall(params, success, failure) {
+      const callbackName = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+
+      params.callback = callbackName;
+
+      const query = Object.keys(params)
+        .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(params[k] || ""))
+        .join("&");
+
+      const script = document.createElement("script");
+      script.src = GAS_URL + "?" + query;
+
+      let done = false;
+
+      window[callbackName] = function(data) {
+        done = true;
+        cleanup();
+        success(data);
+      };
+
+      script.onerror = function() {
+        cleanup();
+        if (failure) failure({ message: "無法連線到 GAS API" });
+      };
+
+      function cleanup() {
+        delete window[callbackName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+      }
+
+      setTimeout(function() {
+        if (!done) {
+          cleanup();
+          if (failure) failure({ message: "連線逾時，請重新操作" });
+        }
+      }, 15000);
+
+      document.body.appendChild(script);
+    }
+
+    function loadProfile() {
+      document.getElementById("recorderName").value = localStorage.getItem("annual_recorderName") || "";
+      document.getElementById("recorderBranch").value = localStorage.getItem("annual_recorderBranch") || "";
+    }
+
+    function saveProfile() {
+      localStorage.setItem("annual_recorderName", document.getElementById("recorderName").value.trim());
+      localStorage.setItem("annual_recorderBranch", document.getElementById("recorderBranch").value.trim());
+    }
+
+    function showTab(tabId, btn) {
+      document.getElementById("searchTab").style.display = "none";
+      document.getElementById("targetTab").style.display = "none";
+      document.getElementById("resultTab").style.display = "none";
+
+      document.getElementById(tabId).style.display = "block";
+
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      btn.classList.add("active");
+
+      if (tabId === "targetTab") renderTargets();
+      if (tabId === "resultTab") updateStats();
+    }
+
+    function loadQuickButtons() {
+      apiCall(
+        { action: "quickKeywords" },
+        function(res) {
+          if (!res.ok) return;
+
+          const box = document.getElementById("quickButtons");
+          box.innerHTML = "";
+
+          res.list.forEach(k => {
+            const btn = document.createElement("button");
+            btn.className = "chip";
+            btn.textContent = k;
+            btn.onclick = function() {
+              document.getElementById("keyword").value = k;
+              searchMembers();
+            };
+            box.appendChild(btn);
+          });
+        },
+        function(err) {
+          console.log(err);
+        }
+      );
+    }
+
+    function searchMembers() {
+      const keyword = document.getElementById("keyword").value.trim();
+      const status = document.getElementById("searchStatus");
+      const result = document.getElementById("result");
+
+      if (!keyword) {
+        alert("請輸入關鍵字");
+        return;
+      }
+
+      status.style.display = "block";
+      status.innerHTML = "搜尋中...";
+      result.innerHTML = "";
+
+      apiCall(
+        {
+          action: "search",
+          keyword: keyword
+        },
+        function(res) {
+          status.style.display = "none";
+
+          if (!res.ok) {
+            result.innerHTML = `<div class="card empty">搜尋失敗：${escapeHtml(res.message)}</div>`;
+            return;
+          }
+
+          showResults(res.list);
+        },
+        function(error) {
+          status.style.display = "block";
+          status.innerHTML = "搜尋失敗：" + escapeHtml(error.message);
+        }
+      );
+    }
+
+    function showResults(list) {
+      const box = document.getElementById("result");
+
+      if (!list || list.length === 0) {
+        box.innerHTML = `
+          <div class="card empty">
+            找不到符合的名單。<br>
+            可以換其他關鍵字，例如：企業主、人資、福委會、保險。
+          </div>
+        `;
+        return;
+      }
+
+      let html = "";
+
+      list.forEach(item => {
+        const itemJson = encodeURIComponent(JSON.stringify(item));
+
+        html += `
+          <div class="card">
+            <div class="person-name">${escapeHtml(item.name || "未填姓名")}</div>
+            <div class="meta">
+              ${escapeHtml(item.branch || "未填分會")}｜${escapeHtml(item.profession || "未填專業")}
+            </div>
+
+            <div class="need">
+              <strong>需要合作 / 引薦對象：</strong><br>
+              ${escapeHtml(item.need || "未填")}
+            </div>
+
+            <div class="small-note">
+              LINE ID：${escapeHtml(item.lineId || "未填")}<br>
+              LINE 名稱：${escapeHtml(item.lineName || "未填")}
+            </div>
+
+            <div class="match">
+              命中關鍵字：${escapeHtml((item.matchedKeywords || []).join("、"))}
+            </div>
+
+            <div class="button-grid">
+              <button class="btn secondary" onclick='quickSaveFromEncoded("${itemJson}", "加入我的目標")'>加入我的目標</button>
+              <button class="btn green" onclick='quickSaveFromEncoded("${itemJson}", "已認識")'>已認識</button>
+              <button class="btn orange" onclick='quickSaveFromEncoded("${itemJson}", "想約1-1")'>想約 1-1</button>
+              <button class="btn gray" onclick='openRecordModalFromEncoded("${itemJson}")'>記錄互動</button>
+            </div>
+          </div>
+        `;
+      });
+
+      box.innerHTML = html;
+    }
+
+    function quickSaveFromEncoded(encoded, actionName) {
+      const item = JSON.parse(decodeURIComponent(encoded));
+      quickSave(item, actionName);
+    }
+
+    function openRecordModalFromEncoded(encoded) {
+      const item = JSON.parse(decodeURIComponent(encoded));
+      openRecordModal(item);
+    }
+
+    function checkProfile() {
+      const recorderName = document.getElementById("recorderName").value.trim();
+      const recorderBranch = document.getElementById("recorderBranch").value.trim();
+
+      if (!recorderName || !recorderBranch) {
+        alert("請先填寫你的姓名與分會");
+        return null;
+      }
+
+      saveProfile();
+
+      return {
+        recorderName,
+        recorderBranch
+      };
+    }
+
+    function quickSave(item, actionName) {
+      const profile = checkProfile();
+      if (!profile) return;
+
+      if (actionName === "加入我的目標") {
+        addLocalTarget(item);
+      }
+
+      if (actionName === "已認識") {
+        markLocalAction(item, "meet");
+      }
+
+      if (actionName === "想約1-1") {
+        markLocalAction(item, "one");
+      }
+
+      const payload = {
+        action: "saveRecord",
+        recorderName: profile.recorderName,
+        recorderBranch: profile.recorderBranch,
+        targetName: item.name,
+        targetBranch: item.branch,
+        targetProfession: item.profession,
+        actionName: actionName,
+        hasLine: actionName === "已加LINE" ? "是" : "",
+        valueLevel: "",
+        nextAction: actionName === "想約1-1" ? "我要約他1-1" : "",
+        note: "",
+        status: "已紀錄"
+      };
+
+      apiCall(
+        payload,
+        function(res) {
+          if (res.ok) {
+            alert("✅ " + actionName + "：已完成紀錄");
+            updateStats();
+          } else {
+            alert("紀錄失敗：" + res.message);
+          }
+        },
+        function(error) {
+          alert("紀錄失敗：" + error.message);
+        }
+      );
+    }
+
+    function openRecordModal(item) {
+      const profile = checkProfile();
+      if (!profile) return;
+
+      currentTarget = item;
+
+      document.getElementById("modalTargetInfo").innerHTML = `
+        目標對象：${escapeHtml(item.name)}｜${escapeHtml(item.branch)}｜${escapeHtml(item.profession)}
+      `;
+
+      document.getElementById("modalAction").value = "加入我的目標";
+      document.getElementById("modalHasLine").value = "";
+      document.getElementById("modalValueLevel").value = "";
+      document.getElementById("modalNextAction").value = "";
+      document.getElementById("modalNote").value = "";
+      document.getElementById("modalStatus").style.display = "none";
+
+      document.getElementById("recordModalBg").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("recordModalBg").style.display = "none";
+      currentTarget = null;
+    }
+
+    function submitRecord() {
+      if (!currentTarget) {
+        alert("找不到目標資料，請重新操作");
+        return;
+      }
+
+      const profile = checkProfile();
+      if (!profile) return;
+
+      const actionName = document.getElementById("modalAction").value;
+
+      if (actionName === "加入我的目標") addLocalTarget(currentTarget);
+      if (actionName === "已認識") markLocalAction(currentTarget, "meet");
+      if (actionName === "想約1-1") markLocalAction(currentTarget, "one");
+      if (actionName === "有引薦可能" || actionName === "有合作可能") markLocalAction(currentTarget, "biz");
+
+      const payload = {
+        action: "saveRecord",
+        recorderName: profile.recorderName,
+        recorderBranch: profile.recorderBranch,
+        targetName: currentTarget.name,
+        targetBranch: currentTarget.branch,
+        targetProfession: currentTarget.profession,
+        actionName: actionName,
+        hasLine: document.getElementById("modalHasLine").value,
+        valueLevel: document.getElementById("modalValueLevel").value,
+        nextAction: document.getElementById("modalNextAction").value,
+        note: document.getElementById("modalNote").value.trim(),
+        status: "已紀錄"
+      };
+
+      const status = document.getElementById("modalStatus");
+      status.style.display = "block";
+      status.innerHTML = "儲存中...";
+
+      apiCall(
+        payload,
+        function(res) {
+          if (res.ok) {
+            status.innerHTML = "✅ 已完成紀錄";
+            updateStats();
+            setTimeout(closeModal, 700);
+          } else {
+            status.innerHTML = "紀錄失敗：" + escapeHtml(res.message);
+          }
+        },
+        function(error) {
+          status.innerHTML = "紀錄失敗：" + escapeHtml(error.message);
+        }
+      );
+    }
+
+    function getLocalTargets() {
+      try {
+        return JSON.parse(localStorage.getItem("annual_targets") || "[]");
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function setLocalTargets(list) {
+      localStorage.setItem("annual_targets", JSON.stringify(list));
+    }
+
+    function targetKey(item) {
+      return [item.name, item.branch, item.profession].join("|");
+    }
+
+    function addLocalTarget(item) {
+      const list = getLocalTargets();
+      const key = targetKey(item);
+
+      const exists = list.some(x => targetKey(x) === key);
+
+      if (!exists) {
+        list.push({
+          name: item.name,
+          branch: item.branch,
+          profession: item.profession,
+          need: item.need,
+          lineId: item.lineId,
+          lineName: item.lineName,
+          meet: false,
+          one: false,
+          biz: false
+        });
+
+        setLocalTargets(list);
+      }
+    }
+
+    function markLocalAction(item, type) {
+      addLocalTarget(item);
+
+      const list = getLocalTargets();
+      const key = targetKey(item);
+
+      const updated = list.map(x => {
+        if (targetKey(x) === key) {
+          x[type] = true;
+        }
+        return x;
+      });
+
+      setLocalTargets(updated);
+    }
+
+    function renderTargets() {
+      const box = document.getElementById("targetList");
+      const list = getLocalTargets();
+
+      if (!list.length) {
+        box.innerHTML = `
+          <div class="card empty">
+            目前還沒有目標名單。<br>
+            請先到「找人脈」搜尋，並按「加入我的目標」。
+          </div>
+        `;
+        return;
+      }
+
+      let html = "";
+
+      list.forEach(item => {
+        const itemJson = encodeURIComponent(JSON.stringify(item));
+
+        html += `
+          <div class="card">
+            <div class="person-name">${escapeHtml(item.name || "未填姓名")}</div>
+            <div class="meta">
+              ${escapeHtml(item.branch || "未填分會")}｜${escapeHtml(item.profession || "未填專業")}
+            </div>
+
+            <div class="need">
+              <strong>需要合作 / 引薦對象：</strong><br>
+              ${escapeHtml(item.need || "未填")}
+            </div>
+
+            <p class="small-note">
+              狀態：
+              ${item.meet ? "✅ 已認識 " : "□ 未認識 "}
+              ${item.one ? "✅ 想約1-1 " : ""}
+              ${item.biz ? "✅ 有引薦/合作可能 " : ""}
+            </p>
+
+            <div class="button-grid">
+              <button class="btn green" onclick='quickSaveFromEncoded("${itemJson}", "已認識")'>已認識</button>
+              <button class="btn orange" onclick='quickSaveFromEncoded("${itemJson}", "想約1-1")'>想約 1-1</button>
+              <button class="btn gray" onclick='openRecordModalFromEncoded("${itemJson}")'>記錄互動</button>
+              <button class="btn secondary" onclick='removeTarget("${escapeAttr(targetKey(item))}")'>移除目標</button>
+            </div>
+          </div>
+        `;
+      });
+
+      box.innerHTML = html;
+    }
+
+    function removeTarget(key) {
+      if (!confirm("確定要從我的目標名單移除嗎？")) return;
+
+      const list = getLocalTargets().filter(x => targetKey(x) !== key);
+      setLocalTargets(list);
+      renderTargets();
+      updateStats();
+    }
+
+    function updateStats() {
+      const list = getLocalTargets();
+
+      const targetCount = list.length;
+      const meetCount = list.filter(x => x.meet).length;
+      const oneCount = list.filter(x => x.one).length;
+      const bizCount = list.filter(x => x.biz).length;
+
+      document.getElementById("statTarget").textContent = targetCount;
+      document.getElementById("statMeet").textContent = meetCount;
+      document.getElementById("statOne").textContent = oneCount;
+      document.getElementById("statBiz").textContent = bizCount;
+
+      document.getElementById("missionText").textContent =
+        "目前完成 " + meetCount + " / 5 位新連結";
+    }
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function escapeAttr(text) {
+      return String(text || "")
+        .replace(/\\/g, "\\\\")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
