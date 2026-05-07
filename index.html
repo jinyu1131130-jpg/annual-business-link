@@ -402,14 +402,14 @@
         <label>需要合作 / 引薦對象</label>
         <textarea id="newNeed" placeholder="例如：企業主、福委會、人資、建商、活動公司"></textarea>
 
-        <label>LINE ID</label>
-        <input id="newLineId" placeholder="可不填" />
+       <label>LINE ID</label>
+<input id="newLineId" placeholder="LINE ID 或加好友連結至少填一個" />
 
-        <label>LINE 名稱</label>
-        <input id="newLineName" placeholder="可不填" />
+<label>LINE 名稱</label>
+<input id="newLineName" placeholder="建議填寫，方便現場辨識" />
 
-        <label>LINE 加好友連結</label>
-        <input id="newLineLink" placeholder="可不填，例如：https://line.me/ti/p/xxxxxx" />
+<label>LINE 加好友連結</label>
+<input id="newLineLink" placeholder="LINE ID 或加好友連結至少填一個，例如：https://line.me/ti/p/xxxxxx" />
 
         <button class="btn green" onclick="submitNewMember()">送出新增名單</button>
 
@@ -716,7 +716,10 @@
         alert("請填寫需要合作 / 引薦對象");
         return;
       }
-
+if (!lineId && !lineLink) {
+  alert("請至少填寫 LINE ID 或 LINE 加好友連結，否則後續無法聯絡。");
+  return;
+}
       const ok = confirm(
         "確認新增這位夥伴？\n\n" +
         "姓名：" + name + "\n" +
