@@ -358,6 +358,12 @@
 
         <label>關鍵字搜尋</label>
         <input id="keyword" placeholder="例如：企業主、保險、室內設計、公司福委會" />
+        <p class="small-note" style="margin-top:8px;">
+  可點選下方快速關鍵字，也可自行輸入。<br>
+  多個關鍵字請用「、」或空格隔開。<br>
+  例如：室內設計、企業主、福委會<br>
+  建議一次搜尋 1～5 個關鍵字，結果會比較精準。
+</p>
 
         <button class="btn" onclick="searchMembers()">搜尋</button>
 
@@ -553,10 +559,9 @@
             const btn = document.createElement("button");
             btn.className = "chip";
             btn.textContent = k;
-            btn.onclick = function() {
-              document.getElementById("keyword").value = k;
-              searchMembers();
-            };
+          btn.onclick = function() {
+  addKeyword(k);
+};
             box.appendChild(btn);
           });
         },
@@ -565,7 +570,33 @@
         }
       );
     }
+function addKeyword(k) {
+  const input = document.getElementById("keyword");
+  const current = input.value.trim();
 
+  let keywords = current
+    ? current.split(/[\s,，、]+/).map(x => x.trim()).filter(Boolean)
+    : [];
+
+  // 防呆 1：避免重複加入
+  if (keywords.includes(k)) {
+    alert("這個關鍵字已經加入了");
+    input.focus();
+    return;
+  }
+
+  // 防呆 2：建議最多 5 個關鍵字
+  if (keywords.length >= 5) {
+    alert("建議一次最多搜尋 5 個關鍵字，結果會比較精準");
+    input.focus();
+    return;
+  }
+
+  keywords.push(k);
+  input.value = keywords.join("、");
+  input.focus();
+}
+    
     function searchMembers() {
       const keyword = document.getElementById("keyword").value.trim();
       const status = document.getElementById("searchStatus");
