@@ -140,11 +140,11 @@
     }
 
     .tabs {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 14px;
-    }
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
 
     .tab {
       border: none;
@@ -302,10 +302,12 @@
 
   <div class="container">
 
-    <div class="tabs">
-      <button class="tab active" onclick="showTab('searchTab', this)">找人脈</button>
-      <button class="tab" onclick="showTab('targetTab', this)">我的目標</button>
-      <button class="tab" onclick="showTab('resultTab', this)">我的成果</button>
+  <div class="tabs">
+  <button class="tab active" onclick="showTab('searchTab', this)">找人脈</button>
+  <button class="tab" onclick="showTab('addTab', this)">新增名單</button>
+  <button class="tab" onclick="showTab('targetTab', this)">我的目標</button>
+  <button class="tab" onclick="showTab('resultTab', this)">我的成果</button>
+</div>
     </div>
 
     <div class="card">
@@ -380,7 +382,40 @@
 
       <div id="result"></div>
     </div>
+<!-- 新增名單 -->
+<div id="addTab" style="display:none;">
+  <div class="card">
+    <h2>現場新增合作夥伴</h2>
+    <p class="small-note">
+      遇到其他分區或新夥伴時，可現場填寫資料。送出後會自動寫入「年會名單」。
+    </p>
 
+    <label>分會</label>
+    <input id="newBranch" placeholder="例如：長城、金鈺、其他分區" />
+
+    <label>姓名</label>
+    <input id="newName" placeholder="例如：張力文 Joey" />
+
+    <label>專業代表</label>
+    <input id="newProfession" placeholder="例如：企業培訓、室內設計、保險" />
+
+    <label>需要合作 / 引薦對象</label>
+    <textarea id="newNeed" placeholder="例如：企業主、福委會、人資、建商、活動公司"></textarea>
+
+    <label>LINE ID</label>
+    <input id="newLineId" placeholder="可不填" />
+
+    <label>LINE 名稱</label>
+    <input id="newLineName" placeholder="可不填" />
+
+    <label>LINE 加好友連結</label>
+    <input id="newLineLink" placeholder="可不填，例如：https://line.me/ti/p/xxxxxx" />
+
+    <button class="btn green" onclick="submitNewMember()">送出新增名單</button>
+
+    <div id="addStatus" class="status"></div>
+  </div>
+</div>
     <!-- 我的目標 -->
     <div id="targetTab" style="display:none;">
       <div class="card">
@@ -540,10 +575,11 @@
       localStorage.setItem("annual_recorderBranch", document.getElementById("recorderBranch").value.trim());
     }
 
-    function showTab(tabId, btn) {
-      document.getElementById("searchTab").style.display = "none";
-      document.getElementById("targetTab").style.display = "none";
-      document.getElementById("resultTab").style.display = "none";
+function showTab(tabId, btn) {
+  document.getElementById("searchTab").style.display = "none";
+  document.getElementById("addTab").style.display = "none";
+  document.getElementById("targetTab").style.display = "none";
+  document.getElementById("resultTab").style.display = "none";
 
       document.getElementById(tabId).style.display = "block";
 
@@ -1102,3 +1138,78 @@ function openLineLink(lineLink, lineId) {
   </script>
 </body>
 </html>
+function submitNewMember() {
+  const profile = checkProfile();
+  if (!profile) return;
+
+  const branch = document.getElementById("newBranch").value.trim();
+  const name = document.getElementById("newName").value.trim();
+  const profession = document.getElementById("newProfession").value.trim();
+  const need = document.getElementById("newNeed").value.trim();
+  const lineId = document.getElementById("newLineId").value.trim();
+  const lineName = document.getElementById("newLineName").value.trim();
+  const lineLink = document.getElementById("newLineLink").value.trim();
+  const status = document.getElementById("addStatus");
+
+  if (!name) {
+    alert("請填寫姓名");
+    return;
+  }
+
+  if (!profession) {
+    alert("請填寫專業代表");
+    return;
+  }
+
+  if (!need) {
+    alert("請填寫需要合作 / 引薦對象");
+    return;
+  }
+
+  const ok = confirm(
+    "確認新增這位夥伴？\n\n" +
+    "姓名：" + name + "\n" +
+    "分會：" + (branch || "未填") + "\n" +
+    "專業代表：" + profession
+  );
+
+  if (!ok) return;
+
+  status.style.display = "block";
+  status.innerHTML = "新增中...";
+
+  apiCall(
+    {
+      action: "addMember",
+      branch: branch,
+      name: name,
+      profession: profession,
+      need: need,
+      lineId: lineId,
+      lineName: lineName,
+      lineLink: lineLink,
+      creatorName: profile.recorderName,
+      creatorBranch: profile.recorderBranch
+    },
+    function(res) {
+      if (res.ok) {
+        status.innerHTML = "✅ 已新增到年會名單";
+
+        document.getElementById("newBranch").value = "";
+        document.getElementById("newName").value = "";
+        document.getElementById("newProfession").value = "";
+        document.getElementById("newNeed").value = "";
+        document.getElementById("newLineId").value = "";
+        document.getElementById("newLineName").value = "";
+        document.getElementById("newLineLink").value = "";
+
+        alert("✅ 已新增成功，現在可以用關鍵字搜尋到這位夥伴。");
+      } else {
+        status.innerHTML = "新增失敗：" + escapeHtml(res.message);
+      }
+    },
+    function(error) {
+      status.innerHTML = "新增失敗：" + escapeHtml(error.message);
+    }
+  );
+}
