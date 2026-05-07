@@ -117,6 +117,11 @@
       color: white;
     }
 
+    .btn.line {
+      background: #06c755;
+      color: white;
+    }
+
     .quick-buttons {
       display: flex;
       flex-wrap: wrap;
@@ -313,37 +318,37 @@
         </div>
 
         <div>
-  <label>你的分會</label>
-  <input
-    id="recorderBranch"
-    list="branchOptions"
-    placeholder="請選擇或輸入分會，例如：金鈺"
-    oninput="saveProfile()"
-  />
+          <label>你的分會</label>
+          <input
+            id="recorderBranch"
+            list="branchOptions"
+            placeholder="請選擇或輸入分會，例如：金鈺"
+            oninput="saveProfile()"
+          />
 
-  <datalist id="branchOptions">
-    <option value="金合">
-    <option value="金鑫">
-    <option value="金鈺">
-    <option value="金虎">
-    <option value="金暘">
-    <option value="金英">
-    <option value="金美">
-    <option value="金澎湃">
-    <option value="金佑">
-    <option value="金盟">
-    <option value="金安">
-    <option value="金利">
-    <option value="長和">
-    <option value="長利">
-    <option value="長翔">
-    <option value="長翼">
-    <option value="長城">
-    <option value="長輝">
-    <option value="長悅">
-    <option value="長佑">
-  </datalist>
-</div>
+          <datalist id="branchOptions">
+            <option value="金合">
+            <option value="金鑫">
+            <option value="金鈺">
+            <option value="金虎">
+            <option value="金暘">
+            <option value="金英">
+            <option value="金美">
+            <option value="金澎湃">
+            <option value="金佑">
+            <option value="金盟">
+            <option value="金安">
+            <option value="金利">
+            <option value="長和">
+            <option value="長利">
+            <option value="長翔">
+            <option value="長翼">
+            <option value="長城">
+            <option value="長輝">
+            <option value="長悅">
+            <option value="長佑">
+          </datalist>
+        </div>
       </div>
 
       <p class="small-note">
@@ -358,12 +363,13 @@
 
         <label>關鍵字搜尋</label>
         <input id="keyword" placeholder="例如：企業主、保險、室內設計、公司福委會" />
+
         <p class="small-note" style="margin-top:8px;">
-  可點選下方快速關鍵字，也可自行輸入。<br>
-  多個關鍵字請用「、」或空格隔開。<br>
-  例如：室內設計、企業主、福委會<br>
-  建議一次搜尋 1～5 個關鍵字，結果會比較精準。
-</p>
+          可點選下方快速關鍵字，也可自行輸入。<br>
+          多個關鍵字請用「、」或空格隔開。<br>
+          例如：室內設計、企業主、福委會<br>
+          建議一次搜尋 1～5 個關鍵字，結果會比較精準。
+        </p>
 
         <button class="btn" onclick="searchMembers()">搜尋</button>
 
@@ -429,6 +435,8 @@
         <option value="已認識">已認識</option>
         <option value="已加LINE">已加 LINE</option>
         <option value="想約1-1">想約 1-1</option>
+        <option value="我可幫他引薦">我可幫他引薦</option>
+        <option value="他可幫我引薦">他可幫我引薦</option>
         <option value="有引薦可能">有引薦可能</option>
         <option value="有合作可能">有合作可能</option>
       </select>
@@ -469,7 +477,7 @@
 
   <script>
     /********************************************
-     * 這裡換成你的 GAS Web App 網址
+     * GAS Web App 網址
      ********************************************/
     const GAS_URL = "https://script.google.com/macros/s/AKfycbzqmneMaQy6JivkLC5DvTcQ51JIPon3zmac_Mf9kds3z6j4FqNxLqewOv8O7-t20JrT/exec";
 
@@ -559,9 +567,9 @@
             const btn = document.createElement("button");
             btn.className = "chip";
             btn.textContent = k;
-          btn.onclick = function() {
-  addKeyword(k);
-};
+            btn.onclick = function() {
+              addKeyword(k);
+            };
             box.appendChild(btn);
           });
         },
@@ -570,57 +578,56 @@
         }
       );
     }
-function addKeyword(k) {
-  const input = document.getElementById("keyword");
-  const current = input.value.trim();
 
-  let keywords = current
-    ? current.split(/[\s,，、]+/).map(x => x.trim()).filter(Boolean)
-    : [];
+    function addKeyword(k) {
+      const input = document.getElementById("keyword");
+      const current = input.value.trim();
 
-  // 防呆 1：避免重複加入
-  if (keywords.includes(k)) {
-    alert("這個關鍵字已經加入了");
-    input.focus();
-    return;
-  }
+      let keywords = current
+        ? current.split(/[\s,，、]+/).map(x => x.trim()).filter(Boolean)
+        : [];
 
-  // 防呆 2：建議最多 5 個關鍵字
-  if (keywords.length >= 5) {
-    alert("建議一次最多搜尋 5 個關鍵字，結果會比較精準");
-    input.focus();
-    return;
-  }
+      if (keywords.includes(k)) {
+        alert("這個關鍵字已經加入了");
+        input.focus();
+        return;
+      }
 
-  keywords.push(k);
-  input.value = keywords.join("、");
-  input.focus();
-}
-    
+      if (keywords.length >= 5) {
+        alert("建議一次最多搜尋 5 個關鍵字，結果會比較精準");
+        input.focus();
+        return;
+      }
+
+      keywords.push(k);
+      input.value = keywords.join("、");
+      input.focus();
+    }
+
     function searchMembers() {
       const keyword = document.getElementById("keyword").value.trim();
       const status = document.getElementById("searchStatus");
       const result = document.getElementById("result");
 
       if (!keyword) {
-  alert("請先輸入或點選至少一個關鍵字");
-  return;
-}
+        alert("請先輸入或點選至少一個關鍵字");
+        return;
+      }
 
-const keywords = keyword
-  .split(/[\s,，、]+/)
-  .map(x => x.trim())
-  .filter(Boolean);
+      const keywords = keyword
+        .split(/[\s,，、]+/)
+        .map(x => x.trim())
+        .filter(Boolean);
 
-if (keywords.length === 0) {
-  alert("請輸入有效的關鍵字");
-  return;
-}
+      if (keywords.length === 0) {
+        alert("請輸入有效的關鍵字");
+        return;
+      }
 
-if (keywords.length > 5) {
-  const ok = confirm("你目前輸入超過 5 個關鍵字，搜尋結果可能會比較雜。仍要繼續搜尋嗎？");
-  if (!ok) return;
-}
+      if (keywords.length > 5) {
+        const ok = confirm("你目前輸入超過 5 個關鍵字，搜尋結果可能會比較雜。仍要繼續搜尋嗎？");
+        if (!ok) return;
+      }
 
       status.style.display = "block";
       status.innerHTML = "搜尋中...";
@@ -688,6 +695,8 @@ if (keywords.length > 5) {
             </div>
 
             <div class="button-grid">
+              <button class="btn line" onclick='copyLineId("${escapeAttr(item.lineId || "")}")'>複製 LINE ID</button>
+              <button class="btn line" onclick='openLineSearch("${escapeAttr(item.lineId || "")}")'>開啟 LINE</button>
               <button class="btn secondary" onclick='quickSaveFromEncoded("${itemJson}", "加入我的目標")'>加入我的目標</button>
               <button class="btn green" onclick='quickSaveFromEncoded("${itemJson}", "已認識")'>已認識</button>
               <button class="btn orange" onclick='quickSaveFromEncoded("${itemJson}", "想約1-1")'>想約 1-1</button>
@@ -812,8 +821,16 @@ if (keywords.length > 5) {
 
       if (actionName === "加入我的目標") addLocalTarget(currentTarget);
       if (actionName === "已認識") markLocalAction(currentTarget, "meet");
+      if (actionName === "已加LINE") markLocalAction(currentTarget, "line");
       if (actionName === "想約1-1") markLocalAction(currentTarget, "one");
-      if (actionName === "有引薦可能" || actionName === "有合作可能") markLocalAction(currentTarget, "biz");
+      if (
+        actionName === "我可幫他引薦" ||
+        actionName === "他可幫我引薦" ||
+        actionName === "有引薦可能" ||
+        actionName === "有合作可能"
+      ) {
+        markLocalAction(currentTarget, "biz");
+      }
 
       const payload = {
         action: "saveRecord",
@@ -882,6 +899,7 @@ if (keywords.length > 5) {
           lineId: item.lineId,
           lineName: item.lineName,
           meet: false,
+          line: false,
           one: false,
           biz: false
         });
@@ -937,14 +955,22 @@ if (keywords.length > 5) {
               ${escapeHtml(item.need || "未填")}
             </div>
 
+            <div class="small-note">
+              LINE ID：${escapeHtml(item.lineId || "未填")}<br>
+              LINE 名稱：${escapeHtml(item.lineName || "未填")}
+            </div>
+
             <p class="small-note">
               狀態：
               ${item.meet ? "✅ 已認識 " : "□ 未認識 "}
+              ${item.line ? "✅ 已加 LINE " : ""}
               ${item.one ? "✅ 想約1-1 " : ""}
               ${item.biz ? "✅ 有引薦/合作可能 " : ""}
             </p>
 
             <div class="button-grid">
+              <button class="btn line" onclick='copyLineId("${escapeAttr(item.lineId || "")}")'>複製 LINE ID</button>
+              <button class="btn line" onclick='openLineSearch("${escapeAttr(item.lineId || "")}")'>開啟 LINE</button>
               <button class="btn green" onclick='quickSaveFromEncoded("${itemJson}", "已認識")'>已認識</button>
               <button class="btn orange" onclick='quickSaveFromEncoded("${itemJson}", "想約1-1")'>想約 1-1</button>
               <button class="btn gray" onclick='openRecordModalFromEncoded("${itemJson}")'>記錄互動</button>
@@ -981,6 +1007,60 @@ if (keywords.length > 5) {
 
       document.getElementById("missionText").textContent =
         "目前完成 " + meetCount + " / 5 位新連結";
+    }
+
+    function copyLineId(lineId) {
+      lineId = String(lineId || "").trim();
+
+      if (!lineId || lineId === "未填") {
+        alert("這位夥伴沒有填寫 LINE ID");
+        return;
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(lineId)
+          .then(function() {
+            alert("已複製 LINE ID：" + lineId + "\n請到 LINE 搜尋貼上。");
+          })
+          .catch(function() {
+            fallbackCopyText(lineId);
+          });
+      } else {
+        fallbackCopyText(lineId);
+      }
+    }
+
+    function fallbackCopyText(text) {
+      const temp = document.createElement("textarea");
+      temp.value = text;
+      document.body.appendChild(temp);
+      temp.select();
+
+      try {
+        document.execCommand("copy");
+        alert("已複製 LINE ID：" + text + "\n請到 LINE 搜尋貼上。");
+      } catch (e) {
+        alert("無法自動複製，請手動複製 LINE ID：" + text);
+      }
+
+      document.body.removeChild(temp);
+    }
+
+    function openLineSearch(lineId) {
+      lineId = String(lineId || "").trim();
+
+      if (!lineId || lineId === "未填") {
+        alert("這位夥伴沒有填寫 LINE ID");
+        return;
+      }
+
+      copyLineId(lineId);
+
+      setTimeout(function() {
+        window.open("https://line.me/R/nv/addFriends", "_blank");
+      }, 300);
+
+      alert("已複製 LINE ID，並準備開啟 LINE 加好友頁面。\n請在 LINE 裡貼上搜尋：" + lineId);
     }
 
     function escapeHtml(text) {
