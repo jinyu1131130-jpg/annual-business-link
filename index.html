@@ -79,12 +79,6 @@
       resize: vertical;
     }
 
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
     .btn {
       width: 100%;
       border: none;
@@ -278,8 +272,29 @@
       margin-top: 4px;
     }
 
+    .radio-group {
+      background: #f8fafc;
+      border: 1px solid #e5eaf0;
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-top: 6px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      font-size: 15px;
+      font-weight: normal;
+      margin: 0;
+    }
+
+    .radio-option input {
+      width: auto;
+    }
+
     @media (max-width: 560px) {
-      .row,
       .button-grid,
       .tabs {
         grid-template-columns: 1fr;
@@ -307,54 +322,6 @@
       <button class="tab" onclick="showTab('addTab', this)">新增名單</button>
       <button class="tab" onclick="showTab('targetTab', this)">我的目標</button>
       <button class="tab" onclick="showTab('resultTab', this)">我的成果</button>
-    </div>
-
-    <div class="card">
-      <h2>先填寫你的資料</h2>
-
-      <div class="row">
-        <div>
-          <label>你的姓名</label>
-          <input id="recorderName" placeholder="例如：許瓊玉" oninput="saveProfile()" />
-        </div>
-
-        <div>
-          <label>你的分會</label>
-          <input
-            id="recorderBranch"
-            list="branchOptions"
-            placeholder="請選擇或輸入分會，例如：金鈺"
-            oninput="saveProfile()"
-          />
-
-          <datalist id="branchOptions">
-            <option value="金合">
-            <option value="金鑫">
-            <option value="金鈺">
-            <option value="金虎">
-            <option value="金暘">
-            <option value="金英">
-            <option value="金美">
-            <option value="金澎湃">
-            <option value="金佑">
-            <option value="金盟">
-            <option value="金安">
-            <option value="金利">
-            <option value="長和">
-            <option value="長利">
-            <option value="長翔">
-            <option value="長翼">
-            <option value="長城">
-            <option value="長輝">
-            <option value="長悅">
-            <option value="長佑">
-          </datalist>
-        </div>
-      </div>
-
-      <p class="small-note">
-        這份資料會暫存在你的手機/瀏覽器。換手機或清除瀏覽器資料後，需要重新填寫。
-      </p>
     </div>
 
     <!-- 找人脈 -->
@@ -385,9 +352,9 @@
     <!-- 新增名單 -->
     <div id="addTab" style="display:none;">
       <div class="card">
-        <h2>現場新增合作夥伴</h2>
+        <h2>新增合作夥伴資料</h2>
         <p class="small-note">
-          遇到其他分區或新夥伴時，可現場填寫資料。送出後會自動寫入「年會名單」。
+          請填寫你的基本資料與希望合作／引薦的對象，送出後會加入年會商務連結名單。
         </p>
 
         <label>分會</label>
@@ -402,14 +369,47 @@
         <label>需要合作 / 引薦對象</label>
         <textarea id="newNeed" placeholder="例如：企業主、福委會、人資、建商、活動公司"></textarea>
 
-       <label>LINE ID</label>
-<input id="newLineId" placeholder="LINE ID 或加好友連結至少填一個" />
+        <label>LINE ID</label>
+        <input id="newLineId" placeholder="LINE ID 或加好友連結至少填一個" />
 
-<label>LINE 名稱</label>
-<input id="newLineName" placeholder="建議填寫，方便現場辨識" />
+        <label>LINE 名稱</label>
+        <input id="newLineName" placeholder="建議填寫，方便現場辨識" />
 
-<label>LINE 加好友連結</label>
-<input id="newLineLink" placeholder="LINE ID 或加好友連結至少填一個，例如：https://line.me/ti/p/xxxxxx" />
+        <label>LINE 加好友連結</label>
+        <input id="newLineLink" placeholder="LINE ID 或加好友連結至少填一個，例如：https://line.me/ti/p/xxxxxx" />
+
+        <label>你從哪裡知道這個連結？</label>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="sourceFrom" value="年會現場連結">
+            年會現場連結
+          </label>
+
+          <label class="radio-option">
+            <input type="radio" name="sourceFrom" value="會員引薦填寫">
+            會員引薦填寫
+          </label>
+
+          <label class="radio-option">
+            <input type="radio" name="sourceFrom" value="分會群組公告">
+            分會群組公告
+          </label>
+
+          <label class="radio-option">
+            <input type="radio" name="sourceFrom" value="商務組協助建檔">
+            商務組協助建檔
+          </label>
+
+          <label class="radio-option">
+            <input type="radio" name="sourceFrom" value="自行填寫">
+            自行填寫
+          </label>
+
+          <label class="radio-option">
+            <input type="radio" name="sourceFrom" value="其他">
+            其他
+          </label>
+        </div>
 
         <button class="btn green" onclick="submitNewMember()">送出新增名單</button>
 
@@ -512,12 +512,11 @@
   </div>
 
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbz-fjT2V4KQb44M7CE-B7nNlfHA8lAcPZGBcN5HQX1uxAEWUiUN96eRgB4kkXxAUpvG/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbylJ1QKGQ2K5JqYfkEfXjzxMwWZboK4ftJNdZv17pPnQsAJhSNJPIPCQNJHonVlHrdX/exec";
 
     let currentTarget = null;
 
     window.onload = function() {
-      loadProfile();
       loadQuickButtons();
       renderTargets();
       updateStats();
@@ -525,7 +524,6 @@
 
     function apiCall(params, success, failure) {
       const callbackName = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
-
       params.callback = callbackName;
 
       const query = Object.keys(params)
@@ -561,16 +559,6 @@
       }, 15000);
 
       document.body.appendChild(script);
-    }
-
-    function loadProfile() {
-      document.getElementById("recorderName").value = localStorage.getItem("annual_recorderName") || "";
-      document.getElementById("recorderBranch").value = localStorage.getItem("annual_recorderBranch") || "";
-    }
-
-    function saveProfile() {
-      localStorage.setItem("annual_recorderName", document.getElementById("recorderName").value.trim());
-      localStorage.setItem("annual_recorderBranch", document.getElementById("recorderBranch").value.trim());
     }
 
     function showTab(tabId, btn) {
@@ -690,9 +678,6 @@
     }
 
     function submitNewMember() {
-      const profile = checkProfile();
-      if (!profile) return;
-
       const branch = document.getElementById("newBranch").value.trim();
       const name = document.getElementById("newName").value.trim();
       const profession = document.getElementById("newProfession").value.trim();
@@ -700,6 +685,8 @@
       const lineId = document.getElementById("newLineId").value.trim();
       const lineName = document.getElementById("newLineName").value.trim();
       const lineLink = document.getElementById("newLineLink").value.trim();
+      const sourceChecked = document.querySelector('input[name="sourceFrom"]:checked');
+      const sourceFrom = sourceChecked ? sourceChecked.value : "";
       const status = document.getElementById("addStatus");
 
       if (!name) {
@@ -716,15 +703,23 @@
         alert("請填寫需要合作 / 引薦對象");
         return;
       }
-if (!lineId && !lineLink) {
-  alert("請至少填寫 LINE ID 或 LINE 加好友連結，否則後續無法聯絡。");
-  return;
-}
+
+      if (!lineId && !lineLink) {
+        alert("請至少填寫 LINE ID 或 LINE 加好友連結，否則後續無法聯絡。");
+        return;
+      }
+
+      if (!sourceFrom) {
+        alert("請選擇你從哪裡知道這個連結");
+        return;
+      }
+
       const ok = confirm(
         "確認新增這位夥伴？\n\n" +
         "姓名：" + name + "\n" +
         "分會：" + (branch || "未填") + "\n" +
-        "專業代表：" + profession
+        "專業代表：" + profession + "\n" +
+        "來源：" + sourceFrom
       );
 
       if (!ok) return;
@@ -742,8 +737,7 @@ if (!lineId && !lineLink) {
           lineId: lineId,
           lineName: lineName,
           lineLink: lineLink,
-          creatorName: profile.recorderName,
-          creatorBranch: profile.recorderBranch
+          sourceFrom: sourceFrom
         },
         function(res) {
           if (res.ok) {
@@ -756,6 +750,10 @@ if (!lineId && !lineLink) {
             document.getElementById("newLineId").value = "";
             document.getElementById("newLineName").value = "";
             document.getElementById("newLineLink").value = "";
+
+            document.querySelectorAll('input[name="sourceFrom"]').forEach(r => {
+              r.checked = false;
+            });
 
             alert("✅ 已新增成功，現在可以用關鍵字搜尋到這位夥伴。");
           } else {
@@ -832,27 +830,7 @@ if (!lineId && !lineLink) {
       openRecordModal(item);
     }
 
-    function checkProfile() {
-      const recorderName = document.getElementById("recorderName").value.trim();
-      const recorderBranch = document.getElementById("recorderBranch").value.trim();
-
-      if (!recorderName || !recorderBranch) {
-        alert("請先填寫你的姓名與分會");
-        return null;
-      }
-
-      saveProfile();
-
-      return {
-        recorderName,
-        recorderBranch
-      };
-    }
-
     function quickSave(item, actionName) {
-      const profile = checkProfile();
-      if (!profile) return;
-
       if (actionName === "加入我的目標") {
         addLocalTarget(item);
       }
@@ -867,8 +845,8 @@ if (!lineId && !lineLink) {
 
       const payload = {
         action: "saveRecord",
-        recorderName: profile.recorderName,
-        recorderBranch: profile.recorderBranch,
+        recorderName: "",
+        recorderBranch: "",
         targetName: item.name,
         targetBranch: item.branch,
         targetProfession: item.profession,
@@ -897,9 +875,6 @@ if (!lineId && !lineLink) {
     }
 
     function openRecordModal(item) {
-      const profile = checkProfile();
-      if (!profile) return;
-
       currentTarget = item;
 
       document.getElementById("modalTargetInfo").innerHTML = `
@@ -927,9 +902,6 @@ if (!lineId && !lineLink) {
         return;
       }
 
-      const profile = checkProfile();
-      if (!profile) return;
-
       const actionName = document.getElementById("modalAction").value;
 
       if (actionName === "加入我的目標") addLocalTarget(currentTarget);
@@ -948,8 +920,8 @@ if (!lineId && !lineLink) {
 
       const payload = {
         action: "saveRecord",
-        recorderName: profile.recorderName,
-        recorderBranch: profile.recorderBranch,
+        recorderName: "",
+        recorderBranch: "",
         targetName: currentTarget.name,
         targetBranch: currentTarget.branch,
         targetProfession: currentTarget.profession,
