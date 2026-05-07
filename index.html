@@ -313,9 +313,37 @@
         </div>
 
         <div>
-          <label>你的分會</label>
-          <input id="recorderBranch" placeholder="例如：金鈺" oninput="saveProfile()" />
-        </div>
+  <label>你的分會</label>
+  <input
+    id="recorderBranch"
+    list="branchOptions"
+    placeholder="請選擇或輸入分會，例如：金鈺"
+    oninput="saveProfile()"
+  />
+
+  <datalist id="branchOptions">
+    <option value="金合">
+    <option value="金鑫">
+    <option value="金鈺">
+    <option value="金虎">
+    <option value="金暘">
+    <option value="金英">
+    <option value="金美">
+    <option value="金澎湃">
+    <option value="金佑">
+    <option value="金盟">
+    <option value="金安">
+    <option value="金利">
+    <option value="長和">
+    <option value="長利">
+    <option value="長翔">
+    <option value="長翼">
+    <option value="長城">
+    <option value="長輝">
+    <option value="長悅">
+    <option value="長佑">
+  </datalist>
+</div>
       </div>
 
       <p class="small-note">
