@@ -133,6 +133,13 @@
       cursor: pointer;
     }
 
+    .chip.branch {
+      background: #fff8e8;
+      border-color: #efd7a0;
+      color: #8a5a00;
+      font-weight: bold;
+    }
+
     .tabs {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -326,6 +333,42 @@
 
     <!-- 找人脈 -->
     <div id="searchTab">
+
+      <div class="card">
+        <h2>快速依分會找人</h2>
+        <p class="small-note">
+          點選分會後，系統會自動搜尋該分會已填資料的夥伴。
+        </p>
+
+        <label>三蘆區</label>
+        <div class="quick-buttons">
+          <button class="chip branch" onclick="quickBranchSearch('金合')">金合</button>
+          <button class="chip branch" onclick="quickBranchSearch('金鑫')">金鑫</button>
+          <button class="chip branch" onclick="quickBranchSearch('金鈺')">金鈺</button>
+          <button class="chip branch" onclick="quickBranchSearch('金虎')">金虎</button>
+          <button class="chip branch" onclick="quickBranchSearch('金暘')">金暘</button>
+          <button class="chip branch" onclick="quickBranchSearch('金英')">金英</button>
+          <button class="chip branch" onclick="quickBranchSearch('金美')">金美</button>
+          <button class="chip branch" onclick="quickBranchSearch('金澎湃')">金澎湃</button>
+          <button class="chip branch" onclick="quickBranchSearch('金佑')">金佑</button>
+          <button class="chip branch" onclick="quickBranchSearch('金盟')">金盟</button>
+          <button class="chip branch" onclick="quickBranchSearch('金安')">金安</button>
+          <button class="chip branch" onclick="quickBranchSearch('金利')">金利</button>
+        </div>
+
+        <label style="margin-top:14px;">中山區</label>
+        <div class="quick-buttons">
+          <button class="chip branch" onclick="quickBranchSearch('長和')">長和</button>
+          <button class="chip branch" onclick="quickBranchSearch('長利')">長利</button>
+          <button class="chip branch" onclick="quickBranchSearch('長翔')">長翔</button>
+          <button class="chip branch" onclick="quickBranchSearch('長翼')">長翼</button>
+          <button class="chip branch" onclick="quickBranchSearch('長城')">長城</button>
+          <button class="chip branch" onclick="quickBranchSearch('長輝')">長輝</button>
+          <button class="chip branch" onclick="quickBranchSearch('長悅')">長悅</button>
+          <button class="chip branch" onclick="quickBranchSearch('長佑')">長佑</button>
+        </div>
+      </div>
+
       <div class="card">
         <h2>搜尋你想認識的人脈</h2>
 
@@ -376,7 +419,7 @@
         <input id="newLineName" placeholder="建議填寫，方便現場辨識" />
 
         <label>LINE 加好友連結</label>
-<input id="newLineLink" placeholder="請貼完整網址，需包含 https://，例如：https://line.me/ti/p/xxxxxx" />
+        <input id="newLineLink" placeholder="請貼完整網址，需包含 https://，例如：https://line.me/ti/p/xxxxxx" />
 
         <label>你從哪裡知道這個連結？</label>
         <div class="radio-group">
@@ -626,6 +669,12 @@
       input.focus();
     }
 
+    function quickBranchSearch(branchName) {
+      const input = document.getElementById("keyword");
+      input.value = branchName;
+      searchMembers();
+    }
+
     function searchMembers() {
       const keyword = document.getElementById("keyword").value.trim();
       const status = document.getElementById("searchStatus");
@@ -708,10 +757,12 @@
         alert("請至少填寫 LINE ID 或 LINE 加好友連結，否則後續無法聯絡。");
         return;
       }
-if (lineLink && !lineLink.startsWith("https://")) {
-  alert("請貼上完整的 LINE 加好友連結，需包含 https://");
-  return;
-}
+
+      if (lineLink && !lineLink.startsWith("https://")) {
+        alert("請貼上完整的 LINE 加好友連結，需包含 https://");
+        return;
+      }
+
       if (!sourceFrom) {
         alert("請選擇你從哪裡知道這個連結");
         return;
